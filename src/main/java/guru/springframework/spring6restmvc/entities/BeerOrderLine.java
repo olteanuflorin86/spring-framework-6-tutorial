@@ -41,6 +41,12 @@ public class BeerOrderLine {
 		return this.id == null;
 	}
 	
+	@ManyToOne
+	private Beer beer;
+	
+	@ManyToOne
+	private BeerOrder beerOrder;
+	
 	private Integer orderQuantity = 0;
 	private Integer quantityAllocated = 0;
 

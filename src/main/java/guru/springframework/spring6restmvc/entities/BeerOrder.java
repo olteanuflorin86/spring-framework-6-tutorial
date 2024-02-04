@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.entities;
 
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.*;
@@ -29,6 +30,9 @@ public class BeerOrder {
 	
 	@Version
 	private Long version;
+	
+	@OneToMany(mappedBy = "beerOrder")
+	private Set<BeerOrderLine> beerOrderLines;
 	
 	@CreationTimestamp
 	@Column(updatable = false)
