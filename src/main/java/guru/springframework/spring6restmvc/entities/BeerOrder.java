@@ -13,11 +13,11 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Builder
 @Entity
 public class BeerOrder {
-
+	
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
@@ -49,4 +49,22 @@ public class BeerOrder {
 	
 	@ManyToOne
 	private Customer customer;
+	
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        customer.getBeerOrders().add(this);
+    }
+
+	public BeerOrder(UUID id, Long version, Set<BeerOrderLine> beerOrderLines, Timestamp createdDate,
+			Timestamp lastModifiedDate, String customerRef, Customer customer) {
+		this.id = id;
+		this.version = version;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.customerRef = customerRef;
+		this.beerOrderLines = beerOrderLines;
+//		this.customer = customer;
+		this.setCustomer(customer);
+	}
+    
 }
