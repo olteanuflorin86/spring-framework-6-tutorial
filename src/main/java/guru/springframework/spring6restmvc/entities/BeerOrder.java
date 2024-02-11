@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.entities;
 
-import java.sql.Timestamp;
+import java.sql.Timestamp; 
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ import lombok.*;
 @Builder
 @Entity
 public class BeerOrder {
-	
+		
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
@@ -28,11 +28,27 @@ public class BeerOrder {
 	@Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
 	private UUID id;
 	
+	public BeerOrder(UUID id, Long version, Set<BeerOrderLine> beerOrderLines, BeerOrderShipment beerOrderShipment,
+			Timestamp createdDate, Timestamp lastModifiedDate, String customerRef, Customer customer) {
+		this.id = id;
+		this.version = version;
+		this.beerOrderLines = beerOrderLines;
+		this.beerOrderShipment = beerOrderShipment;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.customerRef = customerRef;
+//		this.customer = customer;
+		this.setCustomer(customer);
+	}
+    
 	@Version
 	private Long version;
 	
 	@OneToMany(mappedBy = "beerOrder")
 	private Set<BeerOrderLine> beerOrderLines;
+	
+    @OneToOne
+    private BeerOrderShipment beerOrderShipment;
 	
 	@CreationTimestamp
 	@Column(updatable = false)
@@ -55,16 +71,5 @@ public class BeerOrder {
         customer.getBeerOrders().add(this);
     }
 
-	public BeerOrder(UUID id, Long version, Set<BeerOrderLine> beerOrderLines, Timestamp createdDate,
-			Timestamp lastModifiedDate, String customerRef, Customer customer) {
-		this.id = id;
-		this.version = version;
-		this.createdDate = createdDate;
-		this.lastModifiedDate = lastModifiedDate;
-		this.customerRef = customerRef;
-		this.beerOrderLines = beerOrderLines;
-//		this.customer = customer;
-		this.setCustomer(customer);
-	}
-    
+
 }
