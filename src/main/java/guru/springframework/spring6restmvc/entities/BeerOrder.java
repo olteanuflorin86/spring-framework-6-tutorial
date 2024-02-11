@@ -8,6 +8,7 @@ import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import lombok.*;
 
 @Getter
@@ -33,7 +34,8 @@ public class BeerOrder {
 		this.id = id;
 		this.version = version;
 		this.beerOrderLines = beerOrderLines;
-		this.beerOrderShipment = beerOrderShipment;
+//		this.beerOrderShipment = beerOrderShipment;
+		this.setBeerOrderShipment(beerOrderShipment);
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.customerRef = customerRef;
@@ -47,7 +49,7 @@ public class BeerOrder {
 	@OneToMany(mappedBy = "beerOrder")
 	private Set<BeerOrderLine> beerOrderLines;
 	
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private BeerOrderShipment beerOrderShipment;
 	
 	@CreationTimestamp
@@ -70,6 +72,10 @@ public class BeerOrder {
         this.customer = customer;
         customer.getBeerOrders().add(this);
     }
-
+    
+    public void setBeerOrderShipment(BeerOrderShipment beerOrderShipment) {
+        this.beerOrderShipment = beerOrderShipment;
+        beerOrderShipment.setBeerOrder(this);
+    }
 
 }
