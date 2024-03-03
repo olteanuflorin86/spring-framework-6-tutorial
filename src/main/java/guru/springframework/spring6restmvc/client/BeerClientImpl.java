@@ -55,7 +55,8 @@ public class BeerClientImpl implements BeerClient {
 		
 		System.out.println(beerDTOResponse.getBody());
 		
-		return null;
+//		return null;
+		return beerDTOResponse.getBody();
 	}
 
 }
