@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -28,6 +29,8 @@ public class BeerClientImpl implements BeerClient {
 		
 		RestTemplate restTemplate = restTemplateBuilder.build();
 		
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath(GET_BEER_PATH);
+		
 //		ResponseEntity<String> stringResponse = restTemplate.getForEntity("http://localhost:8080/api/v1/beer", String.class);
 		ResponseEntity<String> stringResponse = 
 //				restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, String.class);
@@ -49,8 +52,9 @@ public class BeerClientImpl implements BeerClient {
 				});
 		
 		ResponseEntity<BeerDTOPageImpl> beerDTOResponse =
-//              restTemplate.getForEntity(BASE_URL + GET_BEER_PATH , BeerDTOPageImpl.class);
-				restTemplate.getForEntity(GET_BEER_PATH , BeerDTOPageImpl.class);
+////              restTemplate.getForEntity(BASE_URL + GET_BEER_PATH , BeerDTOPageImpl.class);
+//				restTemplate.getForEntity(GET_BEER_PATH , BeerDTOPageImpl.class);
+				restTemplate.getForEntity(uriComponentsBuilder.toUriString() , BeerDTOPageImpl.class);
 		
 		
 		System.out.println(beerDTOResponse.getBody());
