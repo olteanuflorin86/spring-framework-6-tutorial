@@ -6,6 +6,7 @@ import guru.springframework.spring6restmvc.model.BeerDTO;
 
 public interface BeerClient {
 
-	Page<BeerDTO> listBeers();
+//	Page<BeerDTO> listBeers();
+	Page<BeerDTO> listBeers(String beerName);
 	
 }
