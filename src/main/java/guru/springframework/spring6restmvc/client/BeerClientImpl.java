@@ -15,6 +15,7 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -24,6 +25,7 @@ public class BeerClientImpl implements BeerClient {
 	
 //    private static final String BASE_URL = "http://localhost:8080";
     private static final String GET_BEER_PATH = "/api/v1/beer";
+    private static final String GET_BEER_BY_ID_PATH = "/api/v1/beer/{beerId}";
     
     @Override
     public Page<BeerDTO> listBeers() {
@@ -88,6 +90,12 @@ public class BeerClientImpl implements BeerClient {
 		
 //		return null;
 		return beerDTOResponse.getBody();
+	}
+	
+	@Override
+	public BeerDTO getBeerById(UUID beerId) {
+		RestTemplate restTemplate = restTemplateBuilder.build();
+		return restTemplate.getForObject(GET_BEER_BY_ID_PATH, BeerDTO.class, beerId);
 	}
 
 }
