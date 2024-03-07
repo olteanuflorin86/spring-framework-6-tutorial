@@ -14,6 +14,7 @@ import guru.springframework.spring6restmvc.model.BeerDTOPageImpl;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import lombok.RequiredArgsConstructor;
 
+import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
 
@@ -102,9 +103,12 @@ public class BeerClientImpl implements BeerClient {
 	public BeerDTO createBeer(BeerDTO newBeerDTO) {
 		RestTemplate restTemplate = restTemplateBuilder.build();
 		
-		ResponseEntity<BeerDTO> response = restTemplate.postForEntity(GET_BEER_PATH, newBeerDTO, BeerDTO.class);
+//		ResponseEntity<BeerDTO> response = restTemplate.postForEntity(GET_BEER_PATH, newBeerDTO, BeerDTO.class);
+//		
+//		return null;
 		
-		return null;
+		URI uri = restTemplate.postForLocation(GET_BEER_PATH, newBeerDTO);
+		return restTemplate.getForObject(uri.getPath(), BeerDTO.class);
 	}
 
 }
