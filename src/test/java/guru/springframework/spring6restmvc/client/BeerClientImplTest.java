@@ -1,12 +1,14 @@
 package guru.springframework.spring6restmvc.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull; 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
 
@@ -77,6 +79,28 @@ public class BeerClientImplTest {
     	BeerDTO updatedBeerDTO = beerClient.updateBeer(savedBeerDTO);;
     	
     	assertEquals(newName, updatedBeerDTO.getBeerName());
+    
+    }
+    
+    @Test
+    void testDeleteBeer() {
+    	
+    	BeerDTO newBeerDTO = BeerDTO.builder()
+    		.price(new BigDecimal("10.99"))
+    		.beerName("Mango Bobs 2")
+    		.beerStyle(BeerStyle.IPA)
+    		.quantityOnHand(500)
+    		.upc("123245")
+    		.build();
+    	
+    	BeerDTO savedBeerDTO = beerClient.createBeer(newBeerDTO);
+    	
+    	beerClient.deleteBeer(savedBeerDTO.getId());
+    	
+    	assertThrows(HttpClientErrorException.class, () -> {
+    		// should error
+    		beerClient.getBeerById(savedBeerDTO.getId());
+    	});
     
     }
     
