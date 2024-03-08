@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull; 
 
 import org.junit.jupiter.api.Test; 
@@ -55,6 +56,27 @@ public class BeerClientImplTest {
     	
     	BeerDTO savedBeerDTO = beerClient.createBeer(newBeerDTO);
     	assertNotNull(savedBeerDTO);
+    
+    }
+    
+    @Test
+    void testUpdateBeer() {
+    	
+    	BeerDTO newBeerDTO = BeerDTO.builder()
+    		.price(new BigDecimal("10.99"))
+    		.beerName("Mango Bobs 2")
+    		.beerStyle(BeerStyle.IPA)
+    		.quantityOnHand(500)
+    		.upc("123245")
+    		.build();
+    	
+    	BeerDTO savedBeerDTO = beerClient.createBeer(newBeerDTO);
+    	
+    	final String newName = "Mongo Bobs 3";
+    	savedBeerDTO.setBeerName(newName);
+    	BeerDTO updatedBeerDTO = beerClient.updateBeer(savedBeerDTO);;
+    	
+    	assertEquals(newName, updatedBeerDTO.getBeerName());
     
     }
     
