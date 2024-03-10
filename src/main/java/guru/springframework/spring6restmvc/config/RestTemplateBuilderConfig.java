@@ -24,14 +24,18 @@ public class RestTemplateBuilderConfig {
 		
 		assert rootUrl != null;
 		
-		RestTemplateBuilder builder = configurer.configure(new RestTemplateBuilder());
+//		RestTemplateBuilder builder = configurer.configure(new RestTemplateBuilder());
+//		
+////		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory("http://localhost:8080");
+//		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(rootUrl);
+//		
+//        RestTemplateBuilder builderWithAuth = builder.basicAuthentication(username,password);
+//
+////        return builder.uriTemplateHandler(uriBuilderFactory);
+//        return builderWithAuth.uriTemplateHandler(uriBuilderFactory);
 		
-//		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory("http://localhost:8080");
-		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(rootUrl);
-		
-        RestTemplateBuilder builderWithAuth = builder.basicAuthentication(username,password);
-
-//        return builder.uriTemplateHandler(uriBuilderFactory);
-        return builderWithAuth.uriTemplateHandler(uriBuilderFactory);
+		return configurer.configure(new RestTemplateBuilder())
+                .basicAuthentication(username, password)
+                .uriTemplateHandler(new DefaultUriBuilderFactory(rootUrl));
 	}
 }
