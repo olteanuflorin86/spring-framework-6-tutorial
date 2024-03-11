@@ -38,7 +38,7 @@ public class RestTemplateBuilderConfig {
     }
 	
 	@Bean
-	RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer) {
+	RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer, OAuthClientInterceptor interceptor) {
 		
 		assert rootUrl != null;
 		
@@ -54,6 +54,7 @@ public class RestTemplateBuilderConfig {
 		
 		return configurer.configure(new RestTemplateBuilder())
 //                .basicAuthentication(username, password)
+				.additionalInterceptors(interceptor)
                 .uriTemplateHandler(new DefaultUriBuilderFactory(rootUrl));
 	}
 }
