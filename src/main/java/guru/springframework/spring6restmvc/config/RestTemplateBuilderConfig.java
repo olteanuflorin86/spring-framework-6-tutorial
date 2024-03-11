@@ -24,16 +24,9 @@ public class RestTemplateBuilderConfig {
 //    @Value("${rest.template.password}")
 //    String password;
 
-	private final ClientRegistrationRepository clientRegistrationRepository;
-	private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
-	
-	public RestTemplateBuilderConfig(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
-		this.clientRegistrationRepository = clientRegistrationRepository;
-		this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
-	}
-	
     @Bean
-    OAuth2AuthorizedClientManager auth2AuthorizedClientManager(){
+    OAuth2AuthorizedClientManager auth2AuthorizedClientManager(ClientRegistrationRepository clientRegistrationRepository,
+    														   OAuth2AuthorizedClientService oAuth2AuthorizedClientService){
         var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
                 .clientCredentials()
                 .build();
