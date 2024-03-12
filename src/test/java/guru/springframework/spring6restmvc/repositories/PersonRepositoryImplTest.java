@@ -77,5 +77,19 @@ public class PersonRepositoryImplTest {
 			list.forEach(person -> System.out.println(person.getFirstName()));
 		});
 	}
+
+	@Test
+	void testFluxFilterOnName() {
+		personRepository.findAll()
+				.filter(person -> person.getFirstName().equals("Fiona"))
+				.subscribe(person -> System.out.println(person.getFirstName()));
+	}
+	
+	@Test
+	void testFluxFilterGetById() {
+		Mono<Person> fionaMono = personRepository.findAll().filter(person -> person.getFirstName().equals("Fiona")).next();
+	
+		fionaMono.subscribe(person -> System.out.println(person.getFirstName()));
+	}
 	
 }
