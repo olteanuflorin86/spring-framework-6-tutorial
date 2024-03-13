@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import guru.springframework.spring6restmvc.domain.Person;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -125,6 +126,29 @@ public class PersonRepositoryImplTest {
 		Mono<Person> personMono = personRepository.getById(6);
 		
 		assertTrue(personMono.hasElement().block());
+	}
+	
+	@Test
+	void testGetByIdFoundStepVerifier() {
+		Mono<Person> personMono = personRepository.getById(3);
+		
+		StepVerifier.create(personMono).expectNextCount(1).verifyComplete();
+		
+		personMono.subscribe(person -> {
+			System.out.println(person.getFirstName());
+		});
+	}
+	
+	@Test
+	void testGetByIdNotFoundStepVerifier() {
+		Mono<Person> personMono = personRepository.getById(6);
+		
+//		StepVerifier.create(personMono).expectNextCount(1).verifyComplete();
+		StepVerifier.create(personMono).expectNextCount(0).verifyComplete();
+		
+		personMono.subscribe(person -> {
+			System.out.println(person.getFirstName());
+		});		
 	}
 	
 }
