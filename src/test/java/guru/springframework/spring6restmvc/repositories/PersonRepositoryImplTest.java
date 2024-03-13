@@ -6,6 +6,8 @@ import guru.springframework.spring6restmvc.domain.Person;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 
 public class PersonRepositoryImplTest {
@@ -110,6 +112,19 @@ public class PersonRepositoryImplTest {
 			System.out.println("Error occurred in the mono");
             System.out.println(throwable.toString());
 		});
+	}
+	
+	@Test
+	void testGetByIdFound() {
+		Mono<Person> personMono = personRepository.getById(3);
+		
+		assertTrue(personMono.hasElement().block());
+	}
+	
+	void testGetByIdNotFound() {
+		Mono<Person> personMono = personRepository.getById(6);
+		
+		assertTrue(personMono.hasElement().block());
 	}
 	
 }
