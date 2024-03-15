@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
+import guru.springframework.spring6restmvc.repositories.BeerRepositoryTest;
+import reactor.core.publisher.Mono;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -31,5 +33,15 @@ public class BeerControllerTest {
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
                 .expectBody(BeerDTO.class);
+    }
+    
+    @Test
+    void testCreateNewBeer() {
+        webTestClient.post().uri(BeerController.BEER_PATH)
+        		.body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
+        		.header("Content-Type", "application/json")
+        		.exchange()
+        		.expectStatus().isCreated()
+        		.expectHeader().location("http://localhost:8080/api/v2/beer/4");
     }
 }

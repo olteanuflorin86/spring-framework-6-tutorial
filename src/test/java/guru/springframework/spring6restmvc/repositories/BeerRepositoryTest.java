@@ -37,7 +37,7 @@ public class BeerRepositoryTest {
 		System.out.println(objectMapper.writeValueAsString(getTestBeer()));
 	}
 	
-	Beer getTestBeer() {
+	public static Beer getTestBeer() {
 		return Beer.builder()
 				.beerName("Space Dust")
 				.beerStyle("IPA")
