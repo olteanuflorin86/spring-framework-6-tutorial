@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -48,6 +49,34 @@ public class BeerServiceImpl implements BeerService {
 					return foundBeer;
 				}).flatMap(beerRepository::save)
 				.map(beerMapper::beerToBeerDto);
+	}
+
+	@Override
+	public Mono<BeerDTO> patchBeer(Integer beerId, BeerDTO beerDTO) {
+        return beerRepository.findById(beerId)
+                .map(foundBeer -> {
+                    if(StringUtils.hasText(beerDTO.getBeerName())){
+                        foundBeer.setBeerName(beerDTO.getBeerName());
+                    }
+
+                    if(StringUtils.hasText(beerDTO.getBeerStyle())){
+                        foundBeer.setBeerStyle(beerDTO.getBeerStyle());
+                    }
+
+                    if(beerDTO.getPrice() != null){
+                        foundBeer.setPrice(beerDTO.getPrice());
+                    }
+
+                    if(StringUtils.hasText(beerDTO.getUpc())){
+                        foundBeer.setUpc(beerDTO.getUpc());
+                    }
+
+                    if(beerDTO.getQuantityOnHand() != null){
+                        foundBeer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+                    }
+                    return foundBeer;
+                }).flatMap(beerRepository::save)
+                .map(beerMapper::beerToBeerDto);
 	}
 
 }

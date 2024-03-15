@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -68,4 +69,11 @@ public class BeerController {
 		return beerService.updateBeer(beerId, beerDTO)
 				.map(savedDto -> ResponseEntity.ok().build());
 	}
+	
+    @PatchMapping(BEER_PATH_ID)
+    Mono<ResponseEntity<Void>> patchExistingBeer(@PathVariable Integer beerId,
+                                                 @RequestBody BeerDTO beerDTO){
+        return beerService.patchBeer(beerId, beerDTO)
+                .map(updatedDto -> ResponseEntity.ok().build());
+    }
 }
