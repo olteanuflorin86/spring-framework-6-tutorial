@@ -37,18 +37,27 @@ public class BeerController {
 		return beerService.getBeerById(beerId);
 	}
 	
+//	@PostMapping(BEER_PATH)
+//	ResponseEntity<Void> createNewBeer(@RequestBody BeerDTO beerDTO) {
+//		
+//		AtomicInteger atomicInteger = new AtomicInteger();
+//		
+//		beerService.saveNewBeer(beerDTO).subscribe(savedBeerDTO -> {
+//			atomicInteger.set(savedBeerDTO.getId());
+//		});
+//		
+//		return ResponseEntity.created(UriComponentsBuilder
+//					.fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + atomicInteger.get())
+//					.build().toUri())
+//				.build();
+//	}
 	@PostMapping(BEER_PATH)
-	ResponseEntity<Void> createNewBeer(@RequestBody BeerDTO beerDTO) {
-		
-		AtomicInteger atomicInteger = new AtomicInteger();
-		
-		beerService.saveNewBeer(beerDTO).subscribe(savedBeerDTO -> {
-			atomicInteger.set(savedBeerDTO.getId());
-		});
-		
-		return ResponseEntity.created(UriComponentsBuilder
-					.fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + atomicInteger.get())
-					.build().toUri())
-				.build();
+    Mono<ResponseEntity<Void>> createNewBeer(@RequestBody BeerDTO beerDTO){
+	       return beerService.saveNewBeer(beerDTO)
+	               .map(savedDto -> ResponseEntity.created(UriComponentsBuilder
+	                       .fromHttpUrl("http://localhost:8080/" + BEER_PATH
+	                               + "/" + savedDto.getId())
+	                       .build().toUri())
+	                       .build());
 	}
 }
