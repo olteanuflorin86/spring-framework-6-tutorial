@@ -1,6 +1,9 @@
 package guru.springframework.spring6restmvc.controllers;
 
+import org.junit.jupiter.api.MethodOrderer; 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +13,7 @@ import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepositoryTest;
 import reactor.core.publisher.Mono;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
 public class BeerControllerTest {
@@ -18,6 +22,7 @@ public class BeerControllerTest {
 	WebTestClient webTestClient;
 	
 	@Test
+	@Order(1)
 	void testListBeers() {
 		webTestClient.get().uri(BeerController.BEER_PATH)
 				.exchange()
@@ -27,6 +32,7 @@ public class BeerControllerTest {
 	}
 	
     @Test
+    @Order(2)
     void testGetBeerById() {
         webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
                 .exchange()
@@ -36,6 +42,7 @@ public class BeerControllerTest {
     }
     
     @Test
+    @Order(3)
     void testCreateNewBeer() {
         webTestClient.post().uri(BeerController.BEER_PATH)
         		.body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
@@ -46,6 +53,7 @@ public class BeerControllerTest {
     }
     
     @Test
+    @Order(4)
     void testUpdateExistingBeer() {
         webTestClient.put()
         		.uri(BeerController.BEER_PATH_ID, 1)
@@ -55,6 +63,7 @@ public class BeerControllerTest {
     }
 
     @Test
+    @Order(999)
     void testDeleteBeerById() {
         webTestClient.delete()
                 .uri(BeerController.BEER_PATH_ID, 1)
@@ -62,5 +71,6 @@ public class BeerControllerTest {
                 .expectStatus()
                 .isNoContent();
     }
+    
 
 }
