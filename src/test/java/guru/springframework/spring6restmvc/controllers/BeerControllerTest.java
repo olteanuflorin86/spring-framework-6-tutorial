@@ -53,4 +53,14 @@ public class BeerControllerTest {
         		.exchange()
         		.expectStatus().isNoContent();
     }
+
+    @Test
+    void testDeleteBeerById() {
+        webTestClient.delete()
+                .uri(BeerController.BEER_PATH_ID, 1)
+                .exchange()
+                .expectStatus()
+                .isNoContent();
+    }
+
 }
