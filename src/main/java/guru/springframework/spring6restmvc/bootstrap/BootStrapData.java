@@ -1,13 +1,15 @@
 package guru.springframework.spring6restmvc.bootstrap;
 
-import java.math.BigDecimal;
+import java.math.BigDecimal; 
 import java.time.LocalDateTime;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import guru.springframework.spring6restmvc.domain.Beer;
+import guru.springframework.spring6restmvc.domain.Customer;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
+import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -15,13 +17,19 @@ import lombok.RequiredArgsConstructor;
 public class BootStrapData implements CommandLineRunner {
 	
 	private final BeerRepository beerRepository;
+	private final CustomerRepository customerRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
 		loadBeerData();
+		loadCustomerData();
 		
         beerRepository.count().subscribe(count -> {
             System.out.println("Count is: " + count);
+        });
+        
+        customerRepository.count().subscribe(count -> {
+            System.out.println("Customer Count is: " + count);
         });
 		
 	}
@@ -65,4 +73,26 @@ public class BootStrapData implements CommandLineRunner {
             }
         });
     }
+
+    private void loadCustomerData() {
+        customerRepository.count().subscribe(count -> {
+            if(count == 0){
+                customerRepository.save(Customer.builder()
+                        .customerName("Customer 1")
+                        .build())
+                        .subscribe();
+
+                customerRepository.save(Customer.builder()
+                                .customerName("Customer 2")
+                                .build())
+                        .subscribe();
+
+                customerRepository.save(Customer.builder()
+                                .customerName("Customer 3")
+                                .build())
+                        .subscribe();
+            }
+        });
+    }
+
 }
