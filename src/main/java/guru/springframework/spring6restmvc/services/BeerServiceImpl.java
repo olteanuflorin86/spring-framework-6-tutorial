@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 public class BeerServiceImpl implements BeerService {
 
 	@Override
-	public Mono<BeerDTO> saveBeer(BeerDTO beerDto) {
+	public Mono<BeerDTO> saveBeer(Mono<BeerDTO> beerDto) {
 		// TODO Auto-generated method stub
 		return null;
 	}
