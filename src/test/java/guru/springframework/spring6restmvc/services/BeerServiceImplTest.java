@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.services;
 
-import java.math.BigDecimal; 
+import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import guru.springframework.spring6restmvc.domain.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import reactor.core.publisher.Mono;
+
+import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
 public class BeerServiceImplTest {
@@ -28,16 +31,31 @@ public class BeerServiceImplTest {
 		beerDTO = beerMapper.beerToBeerDto(getTestBeer());
 	}
 	
+//	@Test
+//	void saveBeer() throws InterruptedException {
+//		
+//		Mono<BeerDTO> savedMono = beerService.saveBeer(Mono.just(beerDTO));
+//		
+//		savedMono.subscribe(savedDto -> {
+//			System.out.println(savedDto.getId());
+//		});
+//		
+//		Thread.sleep(1000L);
+//	}
 	@Test
-	void saveBeer() throws InterruptedException {
+	void saveBeer() {
+		
+		AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 		
 		Mono<BeerDTO> savedMono = beerService.saveBeer(Mono.just(beerDTO));
 		
 		savedMono.subscribe(savedDto -> {
 			System.out.println(savedDto.getId());
+			atomicBoolean.set(true);
 		});
 		
-		Thread.sleep(1000L);
+		await().untilTrue(atomicBoolean);
+		
 	}
 	
 	public static Beer getTestBeer() {
