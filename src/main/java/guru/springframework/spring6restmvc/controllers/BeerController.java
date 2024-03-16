@@ -1,7 +1,8 @@
 package guru.springframework.spring6restmvc.controllers;
 
-import java.util.concurrent.atomic.AtomicInteger; 
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -38,7 +40,8 @@ public class BeerController {
 	
 	@GetMapping(BEER_PATH_ID)
 	Mono<BeerDTO> getBeerById(@PathVariable("beerId") Integer beerId) {
-		return beerService.getBeerById(beerId);
+		return beerService.getBeerById(beerId)
+				.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
 	}
 	
 //	@PostMapping(BEER_PATH)
