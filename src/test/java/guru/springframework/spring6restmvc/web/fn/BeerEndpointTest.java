@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import guru.springframework.spring6restmvc.domain.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.services.BeerServiceImplTest;
 import reactor.core.publisher.Mono;
@@ -133,6 +134,44 @@ public class BeerEndpointTest {
                 .expectStatus().isNotFound();
     }
     
+    @Test
+    void testCreateBeerBadData() {
+        Beer testBeer = BeerServiceImplTest.getTestBeer();
+        testBeer.setBeerName("");
+
+        webTestClient.post().uri(BeerRouterConfig.BEER_PATH)
+                .body(Mono.just(testBeer), BeerDTO.class)
+                .header("Content-Type", "application/json")
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+    
+    @Test
+    @Order(4)
+    void testUpdateBeerBadRequest() {
+        BeerDTO testBeer = getSavedTestBeer();
+        testBeer.setBeerStyle("");
+
+        webTestClient.put()
+                .uri(BeerRouterConfig.BEER_PATH_ID, testBeer)
+                .body(Mono.just(testBeer), BeerDTO.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+    
+    @Test
+    @Order(5)
+    void testPatchBeerBadRequest() {
+        BeerDTO testBeer = getSavedTestBeer();
+        testBeer.setBeerStyle("");
+
+        webTestClient.patch()
+                .uri(BeerRouterConfig.BEER_PATH_ID, testBeer)
+                .body(Mono.just(testBeer), BeerDTO.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+       
     public BeerDTO getSavedTestBeer(){
         FluxExchangeResult<BeerDTO> beerDTOFluxExchangeResult = webTestClient.post().uri(BeerRouterConfig.BEER_PATH)
                 .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
