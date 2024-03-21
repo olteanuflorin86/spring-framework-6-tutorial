@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.web.fn;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Bean; 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -24,6 +24,7 @@ public class BeerRouterConfig {
 	public RouterFunction<ServerResponse> beerRoutes() {
 		return route()
 				.GET(BEER_PATH, accept(APPLICATION_JSON), handler::listBeers)
+				.GET(BEER_PATH_ID, accept(APPLICATION_JSON), handler::getBeerById)
 				.build();
 	}
 

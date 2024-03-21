@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
-import java.math.BigDecimal;  
+import java.math.BigDecimal;   
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
