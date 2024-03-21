@@ -1,7 +1,9 @@
 package guru.springframework.spring6restmvc.web.fn;
 
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 import java.util.List;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
 public class BeerEndpointTest {
@@ -84,7 +87,19 @@ public class BeerEndpointTest {
                 .exchange()
                 .expectStatus().isNoContent();
     }
+    
+    @Test
+    @Order(999)
+    void testDeleteBeer() {
+        BeerDTO beerDTO = getSavedTestBeer();
 
+        webTestClient.delete()
+                .uri(BeerRouterConfig.BEER_PATH_ID, beerDTO.getId())
+                .exchange()
+                .expectStatus()
+                .isNoContent();
+    }
+    
     public BeerDTO getSavedTestBeer(){
         FluxExchangeResult<BeerDTO> beerDTOFluxExchangeResult = webTestClient.post().uri(BeerRouterConfig.BEER_PATH)
                 .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)

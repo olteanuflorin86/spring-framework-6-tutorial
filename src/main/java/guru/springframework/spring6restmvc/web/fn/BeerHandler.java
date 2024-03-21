@@ -1,8 +1,10 @@
 package guru.springframework.spring6restmvc.web.fn;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -48,5 +50,13 @@ public class BeerHandler {
                         .patchBeer(request.pathVariable("beerId"), beerDTO))
                 .flatMap(savedDto -> ServerResponse.noContent().build());
 	}
+	
+    public Mono<ServerResponse> deleteBeerById(ServerRequest request){
+//        return beerService.deleteBeerById(request.pathVariable("beerId"))
+//                .then(ServerResponse.noContent().build());
+        return beerService.getById(request.pathVariable("beerId"))
+                .flatMap(beerDTO -> beerService.deleteBeerById(beerDTO.getId()))
+                .then(ServerResponse.noContent().build());
+    }
 	
 }
