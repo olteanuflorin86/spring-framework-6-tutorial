@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.web.fn;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -24,6 +25,7 @@ public class BeerEndpointTest {
 	WebTestClient webTestClient;
 	
     @Test
+    @Order(2)
     void testListBeers() {
         webTestClient.get().uri(BeerRouterConfig.BEER_PATH)
                 .exchange()
@@ -35,6 +37,7 @@ public class BeerEndpointTest {
     }
     
     @Test
+    @Order(1)
     void testGetById() {
         BeerDTO beerDTO = getSavedTestBeer();
 
@@ -57,6 +60,20 @@ public class BeerEndpointTest {
                 .expectHeader().exists("location");
     }
     
+    @Test
+    @Order(3)
+    void testUpdateBeer() {
+
+        BeerDTO beerDTO = getSavedTestBeer();
+        beerDTO.setBeerName("New");
+
+        webTestClient.put()
+                .uri(BeerRouterConfig.BEER_PATH_ID, beerDTO.getId())
+                .body(Mono.just(beerDTO), BeerDTO.class)
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
     public BeerDTO getSavedTestBeer(){
         FluxExchangeResult<BeerDTO> beerDTOFluxExchangeResult = webTestClient.post().uri(BeerRouterConfig.BEER_PATH)
                 .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
