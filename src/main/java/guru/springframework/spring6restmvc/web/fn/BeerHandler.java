@@ -1,8 +1,9 @@
 package guru.springframework.spring6restmvc.web.fn;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component; 
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.services.BeerService;
@@ -23,6 +24,15 @@ public class BeerHandler {
 	public Mono<ServerResponse> getBeerById(ServerRequest request) {
 		return ServerResponse.ok()
 				.body(beerService.getById(request.pathVariable("beerId")), BeerDTO.class);
+	}
+	
+	public Mono<ServerResponse> createNewBeer(ServerRequest request) {
+		return beerService.saveBeer(request.bodyToMono(BeerDTO.class))
+				.flatMap(beerDTO -> ServerResponse
+						.created(UriComponentsBuilder
+                                .fromPath(BeerRouterConfig.BEER_PATH_ID)
+                                .build(beerDTO.getId()))
+                        .build());
 	}
 	
 }
