@@ -25,7 +25,9 @@ public class BeerHandler {
 	
 	public Mono<ServerResponse> getBeerById(ServerRequest request) {
 		return ServerResponse.ok()
-				.body(beerService.getById(request.pathVariable("beerId")), BeerDTO.class);
+				.body(beerService.getById(request.pathVariable("beerId"))
+						.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND))), 
+						BeerDTO.class);
 	}
 	
 	public Mono<ServerResponse> createNewBeer(ServerRequest request) {
@@ -41,6 +43,7 @@ public class BeerHandler {
         return request.bodyToMono(BeerDTO.class)
                 .flatMap(beerDTO -> beerService
                         .updateBeer(request.pathVariable("beerId"), beerDTO))
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .flatMap(savedDto -> ServerResponse.noContent().build());
 	}
 	
@@ -48,6 +51,7 @@ public class BeerHandler {
         return request.bodyToMono(BeerDTO.class)
         		.flatMap(beerDTO -> beerService
                         .patchBeer(request.pathVariable("beerId"), beerDTO))
+        		.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .flatMap(savedDto -> ServerResponse.noContent().build());
 	}
 	
@@ -55,6 +59,7 @@ public class BeerHandler {
 //        return beerService.deleteBeerById(request.pathVariable("beerId"))
 //                .then(ServerResponse.noContent().build());
         return beerService.getById(request.pathVariable("beerId"))
+        		.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .flatMap(beerDTO -> beerService.deleteBeerById(beerDTO.getId()))
                 .then(ServerResponse.noContent().build());
     }
