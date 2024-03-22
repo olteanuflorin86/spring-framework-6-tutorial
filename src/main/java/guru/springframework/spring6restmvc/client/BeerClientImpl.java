@@ -1,5 +1,7 @@
 package guru.springframework.spring6restmvc.client;
 
+import java.util.Map; 
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -21,5 +23,11 @@ public class BeerClientImpl implements BeerClient {
 		return webClient.get().uri(BEER_PATH, String.class)
 				.retrieve().bodyToFlux(String.class);
 	}
+	
+    @Override
+    public Flux<Map> listBeerMap() {
+        return webClient.get().uri(BEER_PATH, Map.class)
+                .retrieve().bodyToFlux(Map.class);
+    }
 
 }

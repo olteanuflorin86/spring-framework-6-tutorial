@@ -33,4 +33,19 @@ class BeerClientImplTest {
 		
 		await().untilTrue(atomicBoolean);
 	}
+	
+    @Test
+    void testGetMap() {
+    	
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        beerClient.listBeerMap().subscribe(response -> {
+            System.out.println(response);
+            
+            atomicBoolean.set(true);
+        });
+
+        await().untilTrue(atomicBoolean);
+    }
+    
 }
