@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.awaitility.Awaitility.await;
+
 @SpringBootTest
 class BeerClientImplTest {
 	
@@ -13,14 +17,20 @@ class BeerClientImplTest {
 	@Test
 	void listBeer() {
 		
+		AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+		
 		beerClient.listBeer().subscribe(response -> {
 			System.out.println(response);
+			
+			atomicBoolean.set(true);
 		});
 		
-		try {
-			Thread.sleep(1000L);
-		} catch(InterruptedException e) {
-			throw new RuntimeException();
-		}
+//		try {
+//			Thread.sleep(1000L);
+//		} catch(InterruptedException e) {
+//			throw new RuntimeException();
+//		}
+		
+		await().untilTrue(atomicBoolean);
 	}
 }
