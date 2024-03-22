@@ -8,13 +8,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import reactor.core.publisher.Flux;
-
+import reactor.core.publisher.Mono;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 
 @Service
 public class BeerClientImpl implements BeerClient {
 	
 	public static final String BEER_PATH = "/api/v3/beer";
+	public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 	
 	private final WebClient webClient;
 	
@@ -45,6 +46,15 @@ public class BeerClientImpl implements BeerClient {
     public Flux<BeerDTO> listBeerDtos() {
         return webClient.get().uri(BEER_PATH)
                 .retrieve().bodyToFlux(BeerDTO.class);
+    }
+    
+    @Override
+    public Mono<BeerDTO> getBeerById(String id) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder.path(BEER_PATH_ID)
+                        .build(id))
+                .retrieve()
+                .bodyToMono(BeerDTO.class);
     }
     
 }
