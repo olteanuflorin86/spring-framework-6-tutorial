@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import reactor.core.publisher.Flux;
 
+import guru.springframework.spring6restmvc.model.BeerDTO;
+
 @Service
 public class BeerClientImpl implements BeerClient {
 	
@@ -36,6 +38,12 @@ public class BeerClientImpl implements BeerClient {
     public Flux<JsonNode> listBeersJsonNode() {
         return webClient.get().uri(BEER_PATH, JsonNode.class)
                 .retrieve().bodyToFlux(JsonNode.class);
+    }
+    
+    @Override
+    public Flux<BeerDTO> listBeerDtos() {
+        return webClient.get().uri(BEER_PATH, BeerDTO.class)
+                .retrieve().bodyToFlux(BeerDTO.class);
     }
     
 }
