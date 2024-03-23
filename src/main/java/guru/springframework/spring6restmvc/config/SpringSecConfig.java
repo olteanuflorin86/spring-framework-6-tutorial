@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.config;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Bean; 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -12,7 +12,7 @@ public class SpringSecConfig {
 
 	@Bean
 	SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
-		http.authorizeExchange()
+		http.csrf().disable().authorizeExchange()
 				.anyExchange().authenticated()
 				.and()
 				.oauth2ResourceServer().jwt();
