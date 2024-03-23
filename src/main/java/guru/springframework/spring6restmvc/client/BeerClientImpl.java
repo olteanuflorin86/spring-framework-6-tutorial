@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.client;
 
-import java.util.Map; 
+import java.util.Map;  
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -87,6 +87,25 @@ public class BeerClientImpl implements BeerClient {
                 .retrieve()
                 .toBodilessEntity()
                 .flatMap(voidResponseEntity -> getBeerById(beerDTO.getId()));
+    }
+    
+    @Override
+    public Mono<BeerDTO> patchBeer(BeerDTO dto) {
+        return webClient.patch()
+                .uri(uriBuilder -> uriBuilder.path(BEER_PATH_ID).build(dto.getId()))
+                .body(Mono.just(dto), BeerDTO.class)
+                .retrieve()
+                .toBodilessEntity()
+                .flatMap(voidResponseEntity -> getBeerById(dto.getId()));
+    }
+
+    @Override
+    public Mono<Void> deleteBeer(BeerDTO dto) {
+        return webClient.delete()
+                .uri(uriBuilder -> uriBuilder.path(BEER_PATH_ID).build(dto.getId()))
+                .retrieve()
+                .toBodilessEntity()
+                .then();
     }
     
 }

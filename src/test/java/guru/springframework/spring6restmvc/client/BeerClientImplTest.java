@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.client;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -148,4 +148,36 @@ class BeerClientImplTest {
         await().untilTrue(atomicBoolean);
     }
     
+    @Test
+    void testPatch() {
+        final String NAME = "New Name";
+
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        beerClient.listBeerDtos()
+                .next()
+                .map(beerDTO ->  BeerDTO.builder().beerName(NAME).id(beerDTO.getId()).build())
+                .flatMap(dto -> beerClient.patchBeer(dto))
+                .subscribe(byIdDto -> {
+                    System.out.println(byIdDto.toString());
+                    atomicBoolean.set(true);
+                });
+
+        await().untilTrue(atomicBoolean);
+    }
+    
+    @Test
+    void testDelete() {
+
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        beerClient.listBeerDtos()
+                .next()
+                .flatMap(dto -> beerClient.deleteBeer(dto))
+                .doOnSuccess(mt -> atomicBoolean.set(true))
+                .subscribe();
+
+        await().untilTrue(atomicBoolean);
+    }
+
 }

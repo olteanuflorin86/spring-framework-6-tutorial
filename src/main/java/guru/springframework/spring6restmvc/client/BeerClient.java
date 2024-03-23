@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.client;
 
-import java.util.Map; 
+import java.util.Map;  
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -25,4 +25,8 @@ public interface BeerClient {
 	Mono<BeerDTO> createBeer(BeerDTO beerDTO);
 	
     Mono<BeerDTO> updateBeer(BeerDTO beerDTO);
+    
+    Mono<BeerDTO> patchBeer(BeerDTO dto);
+
+    Mono<Void> deleteBeer(BeerDTO dto);
 }
