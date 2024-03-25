@@ -141,6 +141,16 @@ class BeerControllerIT {
     }
 
     @Test
+    void testNoAuth() throws Exception {
+        //Test No Auth
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", "800"))
+                .andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
     void testDeleteByIDNotFound() {
         assertThrows(NotFoundException.class, () -> {
             beerController.deleteById(UUID.randomUUID());
@@ -268,10 +278,4 @@ class BeerControllerIT {
         System.out.println(result2.getResponse().getStatus());
     }
 }
-
-
-
-
-
-
 
