@@ -10,6 +10,7 @@ public class SpringSecConfig {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf().ignoringRequestMatchers("/api/**");
 		return http.build();
 	}
 }
